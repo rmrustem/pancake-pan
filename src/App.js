@@ -1,25 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Board from './modules/board/index';
+import DigitalClock from './modules/clock/DigitalClock';
+import useDateHooks from './modules/clock/hooks';
+import useDateRedux from './modules/clock/redux';
+import useDateSagas from './modules/clock/saga';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Board>
+      <DigitalClock locale='ar-EG' useDate={useDateHooks}></DigitalClock>
+      <DigitalClock locale='en-US' useDate={useDateRedux}></DigitalClock>
+      <DigitalClock                useDate={useDateSagas}></DigitalClock>
+    </Board>
   );
 }
 
