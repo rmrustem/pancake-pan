@@ -1,18 +1,20 @@
 import React from 'react';
 import './App.css';
-import Board from './modules/board/index';
-import DigitalClock from './modules/clock/DigitalClock';
-import useDateHooks from './modules/clock/hooks';
-import useDateRedux from './modules/clock/redux';
-import useDateSagas from './modules/clock/saga';
+import Board, { Cell } from './modules/board';
+import DigitalClock from './modules/DigitalClock';
+import Snowflakes from './modules/Snowflakes';
 
 
 function App() {
   return (
     <Board>
-      <DigitalClock locale='ar-EG' useDate={useDateHooks}></DigitalClock>
-      <DigitalClock locale='en-US' useDate={useDateRedux}></DigitalClock>
-      <DigitalClock                useDate={useDateSagas}></DigitalClock>
+      <Cell x="1" y="3" w="6" h="2">
+        <DigitalClock locale="ru"/>
+      </Cell>
+
+      <Cell x="3" y="1" w="1" h="1">
+        <Snowflakes/>
+      </Cell>
     </Board>
   );
 }

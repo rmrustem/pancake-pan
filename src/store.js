@@ -3,16 +3,12 @@ import createSagaMiddleware from 'redux-saga'
 
 const noopReducer = (state={}, action) => state;
 
-const staticReducers = {
+const defaultReducers = {
   app: noopReducer
 };
 
 const defaultState = {
   app: {}
-}
-
-function* noopSaga() {
-  yield {};
 }
 
 function configureStore(initialState) {
@@ -23,22 +19,29 @@ function configureStore(initialState) {
     applyMiddleware(sagaMiddleware)
   );
 
-  store.asyncReducers = {};
-  store.sagaMiddleware = sagaMiddleware;
-
-  store.injectReducer = (key, asyncReducer) => {
-    store.asyncReducers[key] = asyncReducer;
-    store.replaceReducer(createReducer(store.asyncReducers))
+  store.reducers = {};
+  store.injectReducer = (key, reducer) => {
+    if (!(key in store.reducers)) {
+      store.reducers[key] = reducer;
+      store.replaceReducer(createReducer(store.reducers));
+    }
   }
 
-  sagaMiddleware.run(noopSaga)
+  store.sagas = {};
+  store.sagaMiddleware = sagaMiddleware;
+  store.runSaga = (key, saga) => {
+    if (!(key in store.sagas)) {
+      store.sagas[key] = saga;
+      store.sagaMiddleware.run(saga);
+    }
+  }
 
   return store;
 }
 
 function createReducer(asyncReducers) {
   return combineReducers({
-    ...staticReducers,
+    ...defaultReducers,
     ...asyncReducers
   });
 }
